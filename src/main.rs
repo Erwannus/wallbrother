@@ -25,6 +25,15 @@ fn main() {
     let response = String::from_utf8_lossy(&buffer);
     println!("Réponse : {}", response);
 
+    match std::fs::write("toto.png", buffer) {
+        Ok(_) => {
+            println!("Image crée.");
+        }
+        Err(e) => {
+            println!("Erreur lors de la création de l'image : {}", e);
+        }
+    }
+
 
     println!("Hello, world!");
 }
