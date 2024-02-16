@@ -19,21 +19,22 @@ fn main() {
     }
 
     // Lire la réponse du serveur
-    let mut buffer = [0; 10024];
-    stream.read(&mut buffer).unwrap();
-
-    let response = String::from_utf8_lossy(&buffer);
-    println!("Réponse : {}", response);
-
-    match std::fs::write("toto.png", buffer) {
+    let mut buffer = Vec::new();
+    match stream.read_to_end(&mut buffer) {
         Ok(_) => {
-            println!("Image crée.");
+            println!("Réponse len : {}", buffer.len());
+            match std::fs::write("toto.jpg", &buffer) {
+                Ok(_) => {
+                    println!("Image créée.");
+                }
+                Err(e) => {
+                    println!("Erreur lors de la création de l'image : {}", e);
+                }
+            }
         }
         Err(e) => {
-            println!("Erreur lors de la création de l'image : {}", e);
+            println!("Erreur lors de la lecture de la réponse : {}", e);
         }
     }
 
-
-    println!("Hello, world!");
 }
